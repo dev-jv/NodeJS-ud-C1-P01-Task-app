@@ -1,13 +1,16 @@
 // const argv = require('yargs').argv;
 const argv = require('./config/yargs').argv;
 
-// console.log(argv);
+const {crear} = require('./to-do/to-do');
 
 let comando = argv._[0];
 
 switch( comando ) {
     case 'crear':
-        console.log('Crea una tarea');
+        // console.log('Crea una tarea');
+        crear(argv.description)
+            .then(res => console.log(res))
+            .catch(e => console.log(e));
         break;
 
     case 'listar':
