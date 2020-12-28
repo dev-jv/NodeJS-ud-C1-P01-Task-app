@@ -17,7 +17,7 @@ const actDB = () => {
     try {
         list = require("../db/data.json");
     }catch (e) {
-        lis = []
+        list = []
     }
 };
 
@@ -30,14 +30,18 @@ const crear = description => {
     };
 
     list.push(task);
-
     saveDB();
+    return task;
+};
 
-    // return task;
+const getList = () => {
+    actDB();
+    return list;
 };
 
 module.exports = {
-    crear
+    crear,
+    getList
 };
 
 // ------------------------------------------------ <> with Promise

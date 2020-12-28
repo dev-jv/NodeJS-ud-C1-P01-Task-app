@@ -1,17 +1,24 @@
 const argv = require("./config/yargs").argv;
-
-const {crear} = require("./to-do/to-do");
+const colors = require('colors');
+const {crear, getList} = require("./to-do/to-do");
 
 let comando = argv._[0];
 
 switch (comando) {
     case "crear":
-        // console.log('Crea una tarea');
-        crear(argv.description);
+        let tsk = crear(argv.description);
+        console.log(tsk);
         break;
 
     case "listar":
-        console.log("Muestra todas las tareas pendientes");
+        // console.log("Muestra todas las tareas pendientes");
+        let gls = getList();
+
+        for(let tk of gls) {
+            console.log(' ----------------------- // ---- '.blue);
+            console.log('Task: '.blue, tk.description.gray);
+            console.log('State: '.blue, tk.state);
+        }
         break;
 
     case "actualizar":
