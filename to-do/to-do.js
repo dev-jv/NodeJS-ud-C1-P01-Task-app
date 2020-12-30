@@ -1,14 +1,24 @@
+const argv = require("../config/yargs").argv;
+const colors = require('colors');
 const fs = require("fs");
 
+let comando = argv._[0];
 let list = [];
 
 const saveDB = () => {
     let data = JSON.stringify(list);
     fs.writeFile(`db/data.json`, data, e => {
         if (e) {
-            throw new Error("No se pudo crear la tarea");
+            throw new Error("No se pudo crear la tarea".red);
         } else {
-            console.log(`La tarea fué agregada a data.json`);
+            switch (comando) {
+                case "crear":
+                    console.log(`<> La tarea fue agregada a la lista de pendientes!`.blue);
+                    break;
+                case "actualizar":
+                    console.log(`<> La tarea fue actualizada correctamente!`.blue);
+                    break;
+            }
         }
     });
 };
@@ -39,9 +49,26 @@ const getList = () => {
     return list;
 };
 
+const actualizar = (description, state = true) => {
+    actDB();
+
+    let index = list.findIndex( task => {
+        return task.description === description;
+    });
+
+    if(index >= 0){
+        list[index].state = state;
+        saveDB();
+        return true;
+    } else {
+        return false;
+    }
+};
+
 module.exports = {
     crear,
-    getList
+    getList,
+    actualizar
 };
 
 // ------------------------------------------------ <> with Promise
