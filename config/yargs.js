@@ -15,8 +15,15 @@ const argv = require('yargs')
         state: {
             demand: true,
             alias: 's',
-            default: true,
+            default: 'complete',
             desc: 'Actualiza el estado de la tarea'
+        }
+    })
+    .command('eliminar', 'Eliminar una tarea', {
+        description: {
+            demand: true,
+            alias: 'd',
+            desc: 'Elimina la tarea'
         }
     })
     .help()

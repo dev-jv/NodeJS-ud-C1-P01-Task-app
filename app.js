@@ -1,6 +1,6 @@
 const argv = require("./config/yargs").argv;
 const colors = require('colors');
-const {crear, getList, actualizar } = require("./to-do/to-do");
+const {crear, getList, actualizar, eliminar } = require("./to-do/to-do");
 
 let comando = argv._[0];
 
@@ -17,14 +17,24 @@ switch (comando) {
         for(let tk of gls) {
             console.log(' ----------------------- // ---- '.blue);
             console.log('Task: '.blue, tk.description.gray);
-            console.log('State: '.blue, tk.state);
+
+            if(tk.state === 'complete') {
+                console.log('State: '.blue, tk.state.green);
+            } else {
+                console.log('State: '.blue, tk.state);
+            }
         }
         break;
 
     case "actualizar":
         // console.log("Actualiza el estado de una tarea");
-        let ac = actualizar(argv.description, argv.state);
-        // console.log(ac);
+        let act = actualizar(argv.description, argv.state);
+        console.log(act);
+        break;
+
+    case "eliminar":
+        let del = eliminar(argv.description);
+        console.log(del);
         break;
 
     default:

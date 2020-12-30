@@ -1,24 +1,13 @@
-const argv = require("../config/yargs").argv;
 const colors = require('colors');
 const fs = require("fs");
 
-let comando = argv._[0];
 let list = [];
 
 const saveDB = () => {
     let data = JSON.stringify(list);
     fs.writeFile(`db/data.json`, data, e => {
-        if (e) {
-            throw new Error("No se pudo crear la tarea".red);
-        } else {
-            switch (comando) {
-                case "crear":
-                    console.log(`<> La tarea fue agregada a la lista de pendientes!`.blue);
-                    break;
-                case "actualizar":
-                    console.log(`<> La tarea fue actualizada correctamente!`.blue);
-                    break;
-            }
+        if(e){
+            throw new Error('No se pudo guardar');
         }
     });
 };
@@ -36,11 +25,12 @@ const crear = description => {
 
     let task = {
         description,
-        state: false
+        state: 'pending'
     };
 
     list.push(task);
     saveDB();
+    // return ` # La tarea fue agregada a la lista de pendientes!`.blue;
     return task;
 };
 
@@ -59,16 +49,31 @@ const actualizar = (description, state = true) => {
     if(index >= 0){
         list[index].state = state;
         saveDB();
-        return true;
+        return ` # La tarea fue actualizada correctamente!`.blue;
     } else {
-        return false;
+        return ` # No se pudo actualizar la tarea!`.red;
+    }
+};
+
+const eliminar = (description) => {
+    actDB();
+
+    let newlist = list.filter(e => e.description !== description);
+
+    if(list.length === newlist.length){
+        return ` # No se pudo eliminar la tarea!`.red;
+    } else {
+        list = newlist;
+        saveDB();
+        return ` # La tarea se eliminó corectamente!`.blue;
     }
 };
 
 module.exports = {
     crear,
     getList,
-    actualizar
+    actualizar,
+    eliminar
 };
 
 // ------------------------------------------------ <> with Promise
